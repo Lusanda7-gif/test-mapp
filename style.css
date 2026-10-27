@@ -1,3 +1,10 @@
+:root {
+  --main: #00695c;
+  --light: #e0f2f1;
+  --accent: #ffb300;
+  --text: #263238;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
@@ -14,8 +21,8 @@ h1 {
 
 p { padding: 0 15px; }
 
-button{
-     background-color: var(--accent);
+button {
+  background-color: var(--accent);
   color: var(--text);
   padding: 10px 20px;
   border: none;
@@ -24,24 +31,29 @@ button{
   margin: 0 15px 10px;
 }
 
-#map{
-    height: 550px;
-    width: 100%;
-    border-radius: 8px;
+button:hover {
+  background-color: var(--main);
+  color: white;
+}
+
+#map {
+  height: 550px;
+  width: calc(100% - 30px);
+  margin: 0 15px 15px;
+  border-radius: 8px;
 }
 
 .legend {
- background-color: white;
+  background-color: white;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px gray;
   line-height: 1.8;
   color: black;
 }
+.legend h4 { margin: 0 0 5px; }
+.legend p  { margin: 3px 0; padding: 0; font-size: 14px; }
 
-.dot {
-    display: inline; width: 10px; height:10px;border-radius: 50%; margin-right: 6px;;
-}
-
+.dot    { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
 .square { display: inline-block; width: 12px; height: 12px; margin-right: 6px; }
 .line   { display: inline-block; width: 18px; border-top: 3px solid #ef6c00; margin-right: 6px; }
