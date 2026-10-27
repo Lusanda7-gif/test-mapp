@@ -57,3 +57,17 @@ addLayer('pathway.geojson', 'Footpaths', {
   style: { color: '#ef6c00', weight: 3 },
   onEachFeature: (feature, layer) => layer.bindPopup(popupFromProps(feature.properties))
 });
+
+// Bathrooms (points)
+addLayer('bathroom.geojson', 'Bathrooms', {
+  pointToLayer: (feature, latlng) =>
+    L.circleMarker(latlng, { radius: 6, color: '#0d47a1', fillColor: '#1e88e5', fillOpacity: 0.9 }),
+  onEachFeature: (feature, layer) => layer.bindPopup(popupFromProps(feature.properties))
+});
+
+// Eateries (points)
+addLayer('eatery.geojson', 'Eateries', {
+  pointToLayer: (feature, latlng) =>
+    L.circleMarker(latlng, { radius: 6, color: '#4e342e', fillColor: '#8d6e63', fillOpacity: 0.9 }),
+  onEachFeature: (feature, layer) => layer.bindPopup(popupFromProps(feature.properties))
+});
