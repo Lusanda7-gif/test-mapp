@@ -71,3 +71,58 @@ addLayer('eatery.geojson', 'Eateries', {
     L.circleMarker(latlng, { radius: 6, color: '#4e342e', fillColor: '#8d6e63', fillOpacity: 0.9 }),
   onEachFeature: (feature, layer) => layer.bindPopup(popupFromProps(feature.properties))
 });
+
+// Same options for every traffic layer, only the colour changes
+function trafficOptions(colour) {
+  return {
+    pointToLayer: (feature, latlng) =>
+      L.circleMarker(latlng, { radius: 7, color: colour, fillColor: colour, fillOpacity: 0.7 }),
+    onEachFeature: (feature, layer) => layer.bindPopup(popupFromProps(feature.properties))
+  };
+}
+
+// Three empty layers, filled when their files arrive
+var trafficAM  = L.geoJSON(null, trafficOptions('#d81b60'));
+var trafficMid = L.geoJSON(null, trafficOptions('#fdd835'));
+var trafficPM  = L.geoJSON(null, trafficOptions('#6a1b9a'));
+
+// Loads a file into an existing layer
+function loadInto(layer, file) {
+  fetch('data/' + file)
+    .then(res => res.json())
+    .then(data => layer.addData(data));
+}
+
+loadInto(trafficAM,  'traffic_am.geojson');
+loadInto(trafficMid, 'traffic_mid.geojson');
+loadInto(trafficPM,  'traffic_pm.geojson');
+
+// Show morning traffic when the page opens
+trafficAM.addTo(map);
+
+// Radio-button menu: pick ONE time of day
+L.control.layers(
+  { 'Traffic AM': trafficAM, 'Traffic Mid': trafficMid, 'Traffic PM': trafficPM },
+  null,
+  { collapsed: false, position: 'topleft' }
+).addTo(map);
+
+// Legend
+var legend = L.control({ position: 'bottomright' });
+
+legend.onAdd = function () {
+  var div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <h4>Map Legend</h4>
+    <p><span class="square" style="background:#90a4ae"></span> Buildings</p>
+    <p><span class="line"></span> Footpaths</p>
+    <p><span class="dot" style="background:#1e88e5"></span> Bathrooms</p>
+    <p><span class="dot" style="background:#8d6e63"></span> Eateries</p>
+    <p><span class="dot" style="background:#d81b60"></span> Traffic AM</p>
+    <p><span class="dot" style="background:#fdd835"></span> Traffic Mid</p>
+    <p><span class="dot" style="background:#6a1b9a"></span> Traffic PM</p>
+  `;
+  return div;
+};
+
+legend.addTo(map);
