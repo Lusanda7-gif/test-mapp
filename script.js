@@ -121,8 +121,42 @@ legend.onAdd = function () {
     <p><span class="dot" style="background:#d81b60"></span> Traffic AM</p>
     <p><span class="dot" style="background:#fdd835"></span> Traffic Mid</p>
     <p><span class="dot" style="background:#6a1b9a"></span> Traffic PM</p>
+        <p><span class="dot" style="background:green"></span> Pod available</p>
+    <p><span class="dot" style="background:red"></span> Pod occupied</p>
   `;
   return div;
 };
 
 legend.addTo(map);
+
+// CampusSync pods
+var pods = [
+  { name: 'Study Pod 1',    type: 'Study',    lat: -25.7550, lng: 28.2300, available: true  },
+  { name: 'Study Pod 2',    type: 'Study',    lat: -25.7540, lng: 28.2320, available: false },
+  { name: 'Wellness Pod 1', type: 'Wellness', lat: -25.7548, lng: 28.2310, available: true  }
+];
+
+var podLayer = L.layerGroup().addTo(map);
+
+pods.forEach(function (pod) {
+  var colour = pod.available ? 'green' : 'red';
+
+  var marker = L.circleMarker([pod.lat, pod.lng], {
+    radius: 11, color: colour, fillColor: colour, fillOpacity: 0.9
+  }).addTo(podLayer);
+
+  marker.bindPopup('<b>' + pod.name + '</b><br>' + pod.type + ' pod<br>' +
+                   (pod.available ? 'Available' : 'Occupied'));
+
+  // Click a pod to flip it between available and occupied
+  marker.on('click', function () {
+    pod.available = !pod.available;
+    var c = pod.available ? 'green' : 'red';
+    marker.setStyle({ color: c, fillColor: c });
+    marker.setPopupContent('<b>' + pod.name + '</b><br>' + pod.type + ' pod<br>' +
+                           (pod.available ? 'Available' : 'Occupied'));
+  });
+});
+
+layerControl.addOverlay(podLayer, 'Rest Pods');
+
